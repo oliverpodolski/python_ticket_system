@@ -45,3 +45,33 @@ class DatabaseManager:
             );
             """
         )
+
+    def create_user(self, first_name, surname):
+        self.cursor.execute(
+            """
+            INSERT INTO users (first_name, surname)
+            VALUES (%s, %s)
+            """, (first_name, surname)
+        )
+
+        self.connection.commit()
+
+    def remove_user(self, user_id):
+        self.cursor.execute(
+            """
+            DELETE FROM users
+            WHERE user_id = %s
+            """, (user_id,)
+        )
+
+        self.connection.commit()
+
+    def get_users(self):
+        self.cursor.execute(
+            """
+            SELECT * FROM users
+            """
+        )
+        return self.cursor.fetchall()
+
+
