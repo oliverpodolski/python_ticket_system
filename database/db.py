@@ -32,7 +32,8 @@ class DatabaseManager:
                 description TEXT NOT NULL,
                 status VARCHAR(20) NOT NULL,
                 priority INT NOT NULL,
-                CHECK (priority BETWEEN 1 AND 10)
+                CHECK (priority BETWEEN 1 AND 10),
+                assigned_user_id INT
             );
             """
         )
@@ -74,4 +75,19 @@ class DatabaseManager:
         )
         return self.cursor.fetchall()
 
+    def create_ticket(self, ticket_title, ticket_description, status, priority, assigned_user_id):
+        self.cursor.execute(
+            """
+            INSERT INTO tickets (title, description, status, priority, assigned_user_id)
+            VALUES (%s, %s, %s, %s, %s)
+            """, (ticket_title, ticket_description, status, priority, assigned_user_id)
+        )
+        self.connection.commit()
 
+    def get_tickets(self):
+        self.cursor.execute(
+            """
+            SELECT * FROM tickets
+            """
+        )
+        return self.cursor.fetchall()
