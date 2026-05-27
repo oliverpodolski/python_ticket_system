@@ -37,6 +37,7 @@ class DatabaseManager:
             );
             """
         )
+
     def create_table_users(self):
         self.cursor.execute(
             """CREATE TABLE IF NOT EXISTS users (
@@ -88,6 +89,17 @@ class DatabaseManager:
         self.cursor.execute(
             """
             SELECT * FROM tickets
+            ORDER BY priority DESC
             """
         )
         return self.cursor.fetchall()
+
+    def update_ticket_status(self, ticket_id, new_status):
+        self.cursor.execute(
+            """
+            UPDATE tickets
+            SET status = %s
+            WHERE id = %s
+            """, (new_status, ticket_id)
+        )
+        self.connection.commit()
